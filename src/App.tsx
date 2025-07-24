@@ -591,10 +591,11 @@ function App() {
               onClick={() => {
                 setLoading(true);
                 setTimeout(() => {
-                  setSelectedAmount(Number(customAmount));
+                  const amount = Number(customAmount);
+                  setBalance(prev => prev + amount);
                   setShowCustomAmountModal(false);
                   setCustomAmount('');
-                  setLastAddedAmount(Number(customAmount));
+                  setLastAddedAmount(amount);
                   setLoading(false);
                   setShowSuccessModal(true);
                 }, 3000);
