@@ -413,7 +413,7 @@ function App() {
     if (!showWithdrawModal) return null;
     return (
       <div className="fixed inset-0 z-[100] flex flex-col justify-end items-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-        <div className="w-full max-w-sm md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto flex flex-col items-center rounded-t-3xl px-4 md:px-8" style={{ backgroundColor: '#000', height: '50vh' }}>
+        <div className="w-full mx-auto flex flex-col items-center rounded-t-3xl px-4 md:px-8" style={{ backgroundColor: '#000', height: '50vh' }}>
           <div className="w-full flex-1 flex flex-col items-center pt-8">
             <h2 className="text-white text-xl font-bold mb-2">Withdraw</h2>
             <div className="text-gray-400 text-base mb-6">${balance.toFixed(2)} available</div>
