@@ -505,8 +505,8 @@ function App() {
   };
 
   return (
-    <div className="max-w-sm mx-auto min-h-screen flex flex-col" style={{ backgroundColor: '#000' }}>
-      <div className="flex-1 pb-20">
+    <div className="min-h-screen flex flex-col w-full bg-black">
+      <div className="flex-1 pb-20 w-full max-w-5xl mx-auto overflow-y-auto">
         <div className="flex justify-between items-center px-4 py-6 mb-2">
           <h1 className="text-white text-2xl font-semibold">Money</h1>
           <div className="relative">
@@ -519,16 +519,18 @@ function App() {
           </div>
         </div>
 
-        <BalanceCard />
-        <PaychecksCard />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <BalanceCard />
+          <PaychecksCard />
+        </div>
         
         <div className="px-4 mb-4 mt-8">
           <h2 className="text-white text-lg font-semibold">Save & invest</h2>
         </div>
-        
-        <SavingsCard />
-        <BitcoinCard />
-        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <SavingsCard />
+          <BitcoinCard />
+        </div>
         <div className="px-4 mb-4 mt-8">
           <h2 className="text-white text-lg font-semibold">Explore</h2>
         </div>
