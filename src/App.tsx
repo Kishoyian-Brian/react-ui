@@ -463,7 +463,7 @@ function App() {
     if (!showTransferOptionsModal) return null;
     return (
       <div className="fixed inset-0 z-[101] flex flex-col justify-end items-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-        <div className="w-full max-w-sm mx-auto rounded-t-3xl" style={{ backgroundColor: '#18181b' }}>
+        <div className="w-full mx-auto rounded-t-3xl" style={{ backgroundColor: '#18181b' }}>
           <div className="px-0 pt-6 pb-2">
             <div className="text-white text-base font-bold mb-4 px-6">How would you like to transfer ${Number(cashOutValue).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} to your external bank?</div>
             <div className="border-t border-white/20" />
