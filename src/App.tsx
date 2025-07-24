@@ -413,7 +413,7 @@ function App() {
     if (!showWithdrawModal) return null;
     return (
       <div className="fixed inset-0 z-[100] flex flex-col justify-end items-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-        <div className="w-full max-w-sm mx-auto flex flex-col items-center rounded-t-3xl" style={{ backgroundColor: '#000', height: '50vh' }}>
+        <div className="w-full max-w-sm md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto flex flex-col items-center rounded-t-3xl px-4 md:px-8" style={{ backgroundColor: '#000', height: '50vh' }}>
           <div className="w-full flex-1 flex flex-col items-center pt-8">
             <h2 className="text-white text-xl font-bold mb-2">Withdraw</h2>
             <div className="text-gray-400 text-base mb-6">${balance.toFixed(2)} available</div>
@@ -428,12 +428,22 @@ function App() {
               onChange={e => setCashOutValue(Number(e.target.value))}
               className="w-full mb-8 accent-green-500 h-2"
               style={{ accentColor: '#22c55e' }}
+              onWheel={e => {
+                e.preventDefault();
+                const delta = Math.sign(e.deltaY);
+                setCashOutValue(prev => {
+                  let next = prev - delta; // deltaY > 0 means scroll down, so decrease value
+                  if (next < 0) next = 0;
+                  if (next > Math.floor(balance)) next = Math.floor(balance);
+                  return next;
+                });
+              }}
             />
           </div>
           <div className="w-full px-4 pb-8">
             <button
               className="w-full bg-[#22c55e] text-white py-3 rounded-full font-bold text-xl transition-all duration-200 mx-auto block"
-              disabled={Number(cashOutValue) <= 0}
+              disabled={Number(cashOutValue) <= 0 || Number(cashOutValue) > balance}
               onClick={() => {
                 setShowWithdrawModal(false);
                 setWithdrawAmount(Number(cashOutValue));
