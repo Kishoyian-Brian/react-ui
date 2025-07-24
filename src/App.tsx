@@ -411,8 +411,40 @@ function App() {
   // Withdraw Modal
   const WithdrawModal = () => {
     if (!showWithdrawModal) return null;
+
+    // Touch swipe state for mobile
+    const [touchStartY, setTouchStartY] = useState<number | null>(null);
+    const [touching, setTouching] = useState(false);
+
     return (
-      <div className="fixed inset-0 z-[100] flex flex-col justify-end items-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+      <div
+        className="fixed inset-0 z-[100] flex flex-col justify-end items-center"
+        style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+        onTouchStart={e => {
+          if (e.touches.length === 1) {
+            setTouchStartY(e.touches[0].clientY);
+            setTouching(true);
+          }
+        }}
+        onTouchMove={e => {
+          if (!touching || touchStartY === null) return;
+          const currentY = e.touches[0].clientY;
+          const deltaY = currentY - touchStartY;
+          if (Math.abs(deltaY) > 20) { // threshold for swipe
+            setCashOutValue(prev => {
+              let next = prev - Math.sign(deltaY); // swipe up increases, down decreases
+              if (next < 0) next = 0;
+              if (next > Math.floor(balance)) next = Math.floor(balance);
+              return next;
+            });
+            setTouchStartY(currentY); // reset for next increment
+          }
+        }}
+        onTouchEnd={() => {
+          setTouchStartY(null);
+          setTouching(false);
+        }}
+      >
         <div className="w-full mx-auto flex flex-col items-center rounded-t-3xl px-4 md:px-8" style={{ backgroundColor: '#000', height: '50vh' }}>
           <div className="w-full flex-1 flex flex-col items-center pt-8">
             <h2 className="text-white text-xl font-bold mb-2">Withdraw</h2>
