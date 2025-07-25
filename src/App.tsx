@@ -347,9 +347,7 @@ function App() {
           </svg>
         </div>
         <div className="text-gray-400 cursor-pointer" onClick={() => setDollarModal(true)}>
-          <div className="w-15 h-16 flex items-center justify-center">
-            <span className="text-3xl font-bold text-white">$</span>
-          </div>
+          <img src={footerImg} alt="$" className="w-12 h-12 object-contain" />
         </div>
         <div className="text-gray-400">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -740,7 +738,7 @@ function App() {
             <div className="absolute right-4 top-4">
               <ProfileAvatar />
             </div>
-            <div className="text-white text-6xl font-extrabold mb-6 text-center select-none">${dollarValue || '0'}</div>
+            <div className="text-white text-6xl font-extrabold mb-6 text-center select-none">${Number(dollarValue || '0').toLocaleString()}</div>
             <div className="mb-8">
               <button className="bg-[#222] text-white px-6 py-2 rounded-full text-base font-semibold flex items-center gap-2 select-none" disabled>
                 USD <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
@@ -793,7 +791,7 @@ function App() {
           <div className="flex items-center justify-between px-4 pt-6 pb-4 border-b border-[#222]">
             <button onClick={() => setSendToModal(false)} className="text-2xl text-gray-400 font-bold">×</button>
             <div className="flex flex-col items-center flex-1">
-              <div className="text-2xl font-bold">${lastDollarAmount}</div>
+              <div className="text-2xl font-bold">${Number(lastDollarAmount || '0').toLocaleString()}</div>
               <div className="text-xs text-gray-400">Cash balance</div>
             </div>
             <button
@@ -877,7 +875,7 @@ function App() {
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 10 18 4 12" /></svg>
             </div>
             <div className="text-white font-bold text-lg mb-2" style={{ lineHeight: 1.2, textAlign: 'left' }}>
-              You sent ${lastDollarAmount} to {selectedUser?.name}
+              You sent ${Number(lastDollarAmount || '0').toLocaleString()} to {selectedUser?.name}
             </div>
           </div>
           <div className="w-full px-4 pb-8">
@@ -911,7 +909,6 @@ function App() {
                 strokeDasharray="90 150"
               />
             </svg>
-            <div className="text-white text-lg font-semibold">Processing Payment...</div>
           </div>
         </div>
       )}
