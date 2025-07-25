@@ -51,6 +51,36 @@ function App() {
   const [cashOutValue, setCashOutValue] = useState(0);
   const [lastWithdrawnAmount, setLastWithdrawnAmount] = useState<number | null>(null);
   const [transferType, setTransferType] = useState(''); // 'instant' or 'standard'
+  // 1. Add state for dollar modal, dollar value, send to modal, selected user, and confirmation modal
+  const [dollarModal, setDollarModal] = useState(false);
+  const [dollarValue, setDollarValue] = useState('');
+  const [sendToModal, setSendToModal] = useState(false);
+  type User = { name: string; cashtag: string; avatar: string; color: string };
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [confirmationModal, setConfirmationModal] = useState(false);
+  const [lastDollarAmount, setLastDollarAmount] = useState('');
+  const mockUsers = [
+    { name: 'Kellen Bates', cashtag: '$Voidosu', avatar: 'K', color: '#8e44ad' },
+    { name: 'Kate Howard', cashtag: '$LKhowz', avatar: 'K', color: '#b2732b' },
+    { name: 'Julia Wilson', cashtag: '$wilson8823', avatar: 'J', color: '#c0398f' },
+    { name: 'Joshua Aguilar', cashtag: '$aguilarjoshua18', avatar: 'J', color: '#27ae60' },
+    { name: 'Haylee Walls', cashtag: '$HayleeWalls', avatar: 'H', color: '#5dade2' },
+    { name: 'Cierra Shepard', cashtag: '$brutallyhonestcc', avatar: 'C', color: '#e74c3c' },
+    { name: 'Camron Watkins', cashtag: '$kambam3118', avatar: 'C', color: '#27ae60' },
+    { name: 'Morgan Lee', cashtag: '$morganlee', avatar: 'M', color: '#f39c12' },
+    { name: 'Ava Patel', cashtag: '$avapatel', avatar: 'A', color: '#16a085' },
+    { name: 'Ethan Kim', cashtag: '$ethankim', avatar: 'E', color: '#2980b9' },
+    { name: 'Sophia Turner', cashtag: '$sophiaturner', avatar: 'S', color: '#d35400' },
+    { name: 'Liam Smith', cashtag: '$liamsmith', avatar: 'L', color: '#34495e' },
+    { name: 'Olivia Brown', cashtag: '$oliviabrown', avatar: 'O', color: '#8e44ad' },
+    { name: 'Noah Johnson', cashtag: '$noahjohnson', avatar: 'N', color: '#2ecc71' },
+    { name: 'Emma Davis', cashtag: '$emmadavis', avatar: 'E', color: '#e67e22' },
+    { name: 'Mason Clark', cashtag: '$masonclark', avatar: 'M', color: '#1abc9c' },
+    { name: 'Isabella Lewis', cashtag: '$isabellalewis', avatar: 'I', color: '#9b59b6' }
+  ];
+  const [sendToValue, setSendToValue] = useState('');
+  // Add loading state for send-to-pay
+  const [sendLoading, setSendLoading] = useState(false);
 
   useEffect(() => {
     const updateTime = () => {
@@ -316,8 +346,10 @@ function App() {
             <circle cx="8" cy="12" r="2" fill="white"/>
           </svg>
         </div>
-        <div className="text-gray-400">
-          <img src={footerImg} alt="Dollar" className="w-15 h-16 object-contain" />
+        <div className="text-gray-400 cursor-pointer" onClick={() => setDollarModal(true)}>
+          <div className="w-15 h-16 flex items-center justify-center">
+            <span className="text-3xl font-bold text-white">$</span>
+          </div>
         </div>
         <div className="text-gray-400">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -517,6 +549,26 @@ function App() {
     );
   };
 
+  // Add a checkmark SVG for selection
+  const CheckmarkIcon = () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 10 18 4 12" /></svg>
+  );
+
+  // Scan/QR icon SVG for the top left
+  const ScanIcon = () => (
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="7" height="7" rx="2"/>
+      <rect x="14" y="3" width="7" height="7" rx="2"/>
+      <rect x="14" y="14" width="7" height="7" rx="2"/>
+      <rect x="3" y="14" width="7" height="7" rx="2"/>
+    </svg>
+  );
+
+  // User profile avatar for the top right
+  const ProfileAvatar = () => (
+    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile" className="w-8 h-8 rounded-full object-cover border-2 border-white" />
+  );
+
   return (
     <div className="min-h-screen flex flex-col w-full bg-black">
       <div className="flex-1 pb-20 w-full max-w-5xl mx-auto overflow-y-auto">
@@ -674,6 +726,192 @@ function App() {
             >
               Done
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Dollar Modal */}
+      {dollarModal && (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-between bg-[#111] w-full h-full">
+          <div className="w-full flex flex-col items-center justify-center pt-12 relative">
+            <div className="absolute left-4 top-4">
+              <ScanIcon />
+            </div>
+            <div className="absolute right-4 top-4">
+              <ProfileAvatar />
+            </div>
+            <div className="text-white text-6xl font-extrabold mb-6 text-center select-none">${dollarValue || '0'}</div>
+            <div className="mb-8">
+              <button className="bg-[#222] text-white px-6 py-2 rounded-full text-base font-semibold flex items-center gap-2 select-none" disabled>
+                USD <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              </button>
+            </div>
+            <div className="grid grid-cols-3 gap-y-2 gap-x-0 w-11/12 max-w-xs mx-auto mb-8 select-none">
+              {['1','2','3','4','5','6','7','8','9','.','0','<'].map((digit, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    if (digit === '<') setDollarValue(dollarValue.slice(0, -1));
+                    else if (digit === '.' && dollarValue.includes('.')) return;
+                    else if (digit === '.' && dollarValue === '') setDollarValue('0.');
+                    else setDollarValue(dollarValue === '0' ? digit : dollarValue + digit);
+                  }}
+                  className="text-gray-300 text-2xl font-normal py-4 focus:outline-none transition-colors bg-transparent"
+                  style={{ minWidth: 0 }}
+                >
+                  {digit}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="w-full flex gap-4 px-4 pb-8">
+            <button
+              className="flex-1 bg-[#222] text-white text-lg font-semibold py-4 rounded-full"
+              disabled={!dollarValue || dollarValue === '0'}
+            >
+              Request
+            </button>
+            <button
+              onClick={() => {
+                setLastDollarAmount(dollarValue);
+                setDollarModal(false);
+                setSendToModal(true);
+              }}
+              className="flex-1 bg-[#222] text-white text-lg font-semibold py-4 rounded-full"
+              disabled={!dollarValue || dollarValue === '0'}
+            >
+              Pay
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Send To Modal */}
+      {sendToModal && (
+        <div className="fixed inset-0 bg-[#111] text-white z-50 flex flex-col w-full h-full">
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 pt-6 pb-4 border-b border-[#222]">
+            <button onClick={() => setSendToModal(false)} className="text-2xl text-gray-400 font-bold">×</button>
+            <div className="flex flex-col items-center flex-1">
+              <div className="text-2xl font-bold">${lastDollarAmount}</div>
+              <div className="text-xs text-gray-400">Cash balance</div>
+            </div>
+            <button
+              className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-semibold text-base"
+              disabled={!selectedUser}
+              onClick={() => {
+                setSendLoading(true);
+                setTimeout(() => {
+                  // Subtract the sent amount from balance
+                  const sentAmount = parseFloat(lastDollarAmount.replace(/[^\d.]/g, ''));
+                  if (!isNaN(sentAmount)) setBalance(prev => prev - sentAmount);
+                  setSendLoading(false);
+                  setSendToModal(false);
+                  setConfirmationModal(true);
+                }, 2000);
+              }}
+            >
+              Pay
+            </button>
+          </div>
+          {/* Recipient and Note Fields */}
+          <div className="px-4 pt-4">
+            <input
+              type="text"
+              placeholder="To   Name, $Cashtag, Phone, Email"
+              className="w-full bg-[#222] border border-[#222] rounded-xl px-4 py-3 text-base text-white placeholder-gray-400 focus:outline-none mb-3"
+              value={sendToValue}
+              onChange={e => setSendToValue(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="For   Add a note"
+              className="w-full bg-[#222] border border-[#222] rounded-xl px-4 py-3 text-base text-white placeholder-gray-400 focus:outline-none mb-3"
+              // Optionally add note state if you want
+            />
+          </div>
+          {/* Send As Row */}
+          <div className="px-4 flex gap-2 mb-2">
+            <button className="bg-green-600 text-white px-4 py-2 rounded-full font-semibold text-xs">Cash</button>
+            <button className="bg-[#222] text-white px-4 py-2 rounded-full font-semibold text-xs">Gift Card</button>
+            <button className="bg-[#222] text-white px-4 py-2 rounded-full font-semibold text-xs">Stock</button>
+          </div>
+          {/* Suggested Users */}
+          <div className="px-4 text-xs text-gray-400 font-bold mb-2 mt-2 tracking-wide">SUGGESTED</div>
+          <div className="flex-1 overflow-y-auto px-4 pb-4">
+            {mockUsers.filter(user =>
+              user.name.toLowerCase().includes(sendToValue.toLowerCase()) ||
+              user.cashtag.toLowerCase().includes(sendToValue.toLowerCase())
+            ).map((user, idx) => {
+              const isSelected = selectedUser?.cashtag === user.cashtag;
+              return (
+                <div
+                  key={idx}
+                  className={`flex items-center gap-3 py-3 border-b border-[#222] cursor-pointer transition-colors ${isSelected ? 'bg-green-600 text-white' : 'hover:bg-[#181818] text-white'}`}
+                  onClick={() => setSelectedUser(user)}
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <span className={`inline-block w-5 h-5 rounded-md border-2 flex items-center justify-center ${isSelected ? 'border-white bg-green-500' : 'border-gray-500 bg-transparent'}`}>{isSelected && (
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 10 18 4 12" /></svg>
+                    )}</span>
+                  </div>
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-base" style={{ backgroundColor: user.color }}>
+                    {user.avatar}
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium text-base">{user.name}</div>
+                    <div className="text-xs text-gray-300">{user.cashtag}</div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Confirmation Modal */}
+      {confirmationModal && (
+        <div className="fixed inset-0 bg-[#111] z-50 flex flex-col justify-between w-full h-full">
+          <div className="pt-8 pl-6 flex flex-col items-start">
+            <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center mb-4">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 10 18 4 12" /></svg>
+            </div>
+            <div className="text-white font-bold text-lg mb-2" style={{ lineHeight: 1.2, textAlign: 'left' }}>
+              You sent ${lastDollarAmount} to {selectedUser?.name}
+            </div>
+          </div>
+          <div className="w-full px-4 pb-8">
+            <button
+              className="w-full bg-green-500 hover:bg-green-600 text-white py-4 rounded-full font-bold text-lg transition-all duration-200 mx-auto block"
+              style={{maxWidth: '100%'}}
+              onClick={() => {
+                setConfirmationModal(false);
+                setSelectedUser(null);
+                setDollarValue('');
+                setSendToValue('');
+              }}
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
+      {sendLoading && (
+        <div className="fixed inset-0 w-full h-full bg-black z-[100] flex items-center justify-center">
+          <div className="flex flex-col items-center justify-center w-full h-full">
+            <svg className="animate-spin mb-4" width="60" height="60" viewBox="0 0 50 50">
+              <circle
+                cx="25"
+                cy="25"
+                r="20"
+                fill="none"
+                stroke="#22c55e"
+                strokeWidth="6"
+                strokeLinecap="round"
+                strokeDasharray="90 150"
+              />
+            </svg>
+            <div className="text-white text-lg font-semibold">Processing Payment...</div>
           </div>
         </div>
       )}
