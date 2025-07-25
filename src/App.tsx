@@ -846,7 +846,7 @@ function App() {
               return (
                 <div
                   key={idx}
-                  className={`flex items-center gap-3 py-3 border-b border-[#222] cursor-pointer transition-colors ${isSelected ? 'bg-green-600 text-white' : 'hover:bg-[#181818] text-white'}`}
+                  className={`flex items-center gap-3 py-3 border-b border-[#222] cursor-pointer transition-colors hover:bg-[#181818] text-white`}
                   onClick={() => setSelectedUser(user)}
                 >
                   <div className="w-6 h-6 flex items-center justify-center">
