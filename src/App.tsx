@@ -203,7 +203,7 @@ function App() {
 
   // Balance Card Component
   const BalanceCard = () => (
-    <div className="rounded-2xl p-6 mx-4 mb-4 hover:opacity-90 transition-all duration-300 shadow-lg" style={{ backgroundColor: '#333' }}>
+    <div className="rounded-2xl p-6 mx-4 mb-4 hover:opacity-90 transition-all duration-300 shadow-lg" style={{ backgroundColor: '#151515' }}>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-white text-lg font-medium">Cash balance</h2>
         <div className="text-gray-400 hover:text-gray-300 transition-colors">
@@ -223,13 +223,13 @@ function App() {
       <div className="grid grid-cols-2 gap-3">
         <button 
           onClick={handleAddMoney}
-          className="text-white py-3 rounded-xl text-center font-medium hover:opacity-80 transition-all duration-200 transform hover:scale-105 active:scale-95" style={{ backgroundColor: '#444' }}
+          className="text-white py-3 rounded-xl text-center font-medium hover:opacity-80 transition-all duration-200 transform hover:scale-105 active:scale-95" style={{ backgroundColor: '#222' }}
         >
           Add money
         </button>
         <button 
           onClick={handleWithdraw}
-          className="text-white py-3 rounded-xl text-center font-medium hover:opacity-80 transition-all duration-200 transform hover:scale-105 active:scale-95" style={{ backgroundColor: '#444' }}
+          className="text-white py-3 rounded-xl text-center font-medium hover:opacity-80 transition-all duration-200 transform hover:scale-105 active:scale-95" style={{ backgroundColor: '#222' }}
         >
           Withdraw
         </button>
@@ -239,7 +239,7 @@ function App() {
 
   // Paychecks Card Component
   const PaychecksCard = () => (
-    <div className="rounded-2xl p-6 mx-4 mb-4 hover:opacity-90 transition-all duration-300 shadow-lg cursor-pointer" style={{ backgroundColor: '#333' }}>
+    <div className="rounded-2xl p-6 mx-4 mb-4 hover:opacity-90 transition-all duration-300 shadow-lg cursor-pointer" style={{ backgroundColor: '#151515' }}>
       <div className="flex items-center">
         <div className="mr-4 relative overflow-hidden rounded-full" style={{ width: 48, height: 48 }}>
           <img src={paycheckImg} alt="Paycheck" className="absolute inset-0 w-full h-full object-cover rounded-full" />
@@ -257,7 +257,7 @@ function App() {
 
   // Savings Card Component
   const SavingsCard = () => (
-    <div className="rounded-2xl p-6 mx-4 mb-4 hover:opacity-90 transition-all duration-300 shadow-lg cursor-pointer" style={{ backgroundColor: '#333' }}>
+    <div className="rounded-2xl p-6 mx-4 mb-4 hover:opacity-90 transition-all duration-300 shadow-lg cursor-pointer" style={{ backgroundColor: '#151515' }}>
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-white text-lg font-medium mb-2">Savings</h3>
@@ -282,7 +282,7 @@ function App() {
 
   // Bitcoin Card Component
   const BitcoinCard = () => (
-    <div className="rounded-2xl p-6 mx-4 mb-4 hover:opacity-90 transition-all duration-300 shadow-lg cursor-pointer" style={{ backgroundColor: '#333' }}>
+    <div className="rounded-2xl p-6 mx-4 mb-4 hover:opacity-90 transition-all duration-300 shadow-lg cursor-pointer" style={{ backgroundColor: '#151515' }}>
       <div className="flex justify-between items-start">
         <div>
           <h3 className="text-white text-lg font-medium mb-2">Bitcoin</h3>
@@ -412,38 +412,10 @@ function App() {
   const WithdrawModal = () => {
     if (!showWithdrawModal) return null;
 
-    // Touch swipe state for mobile
-    const [touchStartY, setTouchStartY] = useState<number | null>(null);
-    const [touching, setTouching] = useState(false);
-
     return (
       <div
         className="fixed inset-0 z-[100] flex flex-col justify-end items-center"
         style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
-        onTouchStart={e => {
-          if (e.touches.length === 1) {
-            setTouchStartY(e.touches[0].clientY);
-            setTouching(true);
-          }
-        }}
-        onTouchMove={e => {
-          if (!touching || touchStartY === null) return;
-          const currentY = e.touches[0].clientY;
-          const deltaY = currentY - touchStartY;
-          if (Math.abs(deltaY) > 20) { // threshold for swipe
-            setCashOutValue(prev => {
-              let next = prev - Math.sign(deltaY); // swipe up increases, down decreases
-              if (next < 0) next = 0;
-              if (next > Math.floor(balance)) next = Math.floor(balance);
-              return next;
-            });
-            setTouchStartY(currentY); // reset for next increment
-          }
-        }}
-        onTouchEnd={() => {
-          setTouchStartY(null);
-          setTouching(false);
-        }}
       >
         <div className="w-full mx-auto flex flex-col items-center rounded-t-3xl px-4 md:px-8" style={{ backgroundColor: '#000', height: '50vh' }}>
           <div className="w-full flex-1 flex flex-col items-center pt-8">
@@ -455,10 +427,9 @@ function App() {
               type="range"
               min={0}
               max={Math.floor(balance)}
-              step={1}
               value={cashOutValue}
               onChange={e => setCashOutValue(Number(e.target.value))}
-              className="w-full mb-8 accent-green-500 h-2"
+              className="w-full mb-8 accent-green-500 h-4"
               style={{ accentColor: '#22c55e' }}
               onWheel={e => {
                 e.preventDefault();
