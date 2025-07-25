@@ -795,9 +795,10 @@ function App() {
               <div className="text-xs text-gray-400">Cash balance</div>
             </div>
             <button
-              className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-semibold text-base"
-              disabled={!selectedUser}
+              className={`px-6 py-2 rounded-full font-semibold text-base ${selectedUser && Number(lastDollarAmount) > 0 && Number(lastDollarAmount) <= balance ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-gray-700 text-gray-400 cursor-not-allowed'}`}
+              disabled={!selectedUser || Number(lastDollarAmount) > balance || Number(lastDollarAmount) <= 0}
               onClick={() => {
+                if (!selectedUser || Number(lastDollarAmount) > balance || Number(lastDollarAmount) <= 0) return;
                 setSendLoading(true);
                 setTimeout(() => {
                   // Subtract the sent amount from balance
