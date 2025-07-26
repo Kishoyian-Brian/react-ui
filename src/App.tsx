@@ -730,7 +730,7 @@ function App() {
 
       {/* Dollar Modal */}
       {dollarModal && (
-        <div className="fixed inset-0 z-50 flex flex-col items-center justify-between bg-[#111] w-full h-full">
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-between bg-[#000] w-full h-full">
           <div className="w-full flex flex-col items-center justify-center pt-12 relative">
             <div className="absolute left-4 top-4">
               <ScanIcon />
@@ -786,7 +786,7 @@ function App() {
 
       {/* Send To Modal */}
       {sendToModal && (
-        <div className="fixed inset-0 bg-[#111] text-white z-50 flex flex-col w-full h-full">
+        <div className="fixed inset-0 bg-[#000] text-white z-50 flex flex-col w-full h-full">
           {/* Header */}
           <div className="flex items-center justify-between px-4 pt-6 pb-4 border-b border-[#222]">
             <button onClick={() => setSendToModal(false)} className="text-2xl text-gray-400 font-bold">×</button>
@@ -870,7 +870,7 @@ function App() {
 
       {/* Confirmation Modal */}
       {confirmationModal && (
-        <div className="fixed inset-0 bg-[#111] z-50 flex flex-col justify-between w-full h-full">
+        <div className="fixed inset-0 bg-[#000] z-50 flex flex-col justify-between w-full h-full">
           <div className="pt-8 pl-6 flex flex-col items-start">
             <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center mb-4">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 10 18 4 12" /></svg>
